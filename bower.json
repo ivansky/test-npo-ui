@@ -1,0 +1,20 @@
+{
+  "name": "test-npo-ui",
+  "version": "1.0.0",
+  "authors": [
+    "Ivan Martianov <i@ivansky.ru>"
+  ],
+  "description": "Test UI for NPO Computer",
+  "keywords": [
+    "test"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ]
+}
