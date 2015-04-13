@@ -1,0 +1,13 @@
+{
+	"floors": [
+		{
+			"name": "Первый этаж",
+			"image": "/public/assets/images/floor-1.png",
+			"data": "/json/floor-1.json"
+		},{
+			"name": "Второй этаж",
+			"image": "/public/assets/images/floor-2.png",
+			"data": "/json/floor-2.json"
+		}
+	]
+}
