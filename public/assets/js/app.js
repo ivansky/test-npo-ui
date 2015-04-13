@@ -31,10 +31,7 @@ var App = (function($, Snap){
 		current: 0,
 		floors: [],
 		containers: [
-			'nameContainer',
-			'roomsMenuContainer',
-			'floorContainer',
-			'floorSelectContainer'
+			'floorContainer'
 		]
 	};
 
@@ -59,6 +56,8 @@ var App = (function($, Snap){
 		var callback = __callback || function(){};
 
 		$.each(Floors[IndexFloor].rooms, function(Index, Room){
+
+			Room.checked = false;
 
 			switch(Room.type){
 				case "rect":
@@ -103,14 +102,6 @@ var App = (function($, Snap){
 		Events.trigger("floorLoadIn", [Floors[IndexFloor], IndexFloor]);
 
 		SVG.clear();
-
-		if(Settings.nameContainer){
-			Settings.nameContainer.html(Floors[IndexFloor].name);
-		}
-
-		if(Settings.roomsMenuContainer){
-			Settings.roomsMenuContainer.empty();
-		}
 
 		Settings.floorContainer.css({backgroundImage:''}).removeClass('has-bg');;
 
