@@ -16,5 +16,10 @@
     "public/components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "snap.svg": "~0.4.0",
+    "lesshat": "~3.0.2",
+    "jquery": "~2.1.3"
+  }
 }

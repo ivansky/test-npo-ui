@@ -3,11 +3,137 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Test NPO Comp UI</title>
+	<!--<link rel="stylesheet" type="text/css" href="/public/assets/bootstrap-customize/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/public/assets/bootstrap-customize/css/bootstrap-theme.min.css">-->
+	<link rel="stylesheet" type="text/css" href="/public/assets/css/frontend.css">
+	<script type="text/javascript" src="/public/components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/public/components/snap.svg/dist/snap.svg-min.js"></script>
+	<script type="text/javascript" src="/public/assets/bootstrap-customize/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<main>
-		<section></section>
-		<aside></aside>
+	<main class="building">
+		<header>
+			<div class="dropdown clearfix">
+				<h2><span class="floor-name">Загрузка...</span></h2>
+				<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+					<span class="caret"></span>
+				</a>
+				<ul class="floor-select dropdown-menu dropdown-menu-right" role="menu"></ul>
+			</div>
+		</header>
+		<section>
+			<div class="floor">
+				<svg></svg>
+			</div>
+		</section>
+		<aside>
+			<ul class="room-list"></ul>
+		</aside>
 	</main>
+
+	<script type="text/javascript" src="/public/assets/js/app.js"></script>
+	<script type="text/javascript">
+		$(window).load(function(){
+
+			var a = App.getInstance();
+
+			a.load({
+				/* Move to global scope by Trigger Events
+				 *
+				 * nameContainer: 'main.building .floor-name',
+				 * roomsMenuContainer: 'main.building .room-list',
+				 * floorSelectContainer: 'main.building .floor-select',
+				*/
+				floorContainer: 'main.building .floor',
+				config: "/json/config.json"
+			});
+
+			a.events().on("floorsLoaded", function(e, Floors){
+				var floorSelect = $('main.building .floor-select');
+
+				floorSelect.empty();
+
+				$.each(Floors, function(Index, Floor){
+					var li = $('<li><a href="#"></a></li>'),
+						link = li.find('a');
+
+					floorSelect.append(li);
+
+					link.html(Floor.name).click(function(){
+						a.setFloor(Index);
+					});
+				});
+			});
+
+			a.events().on("roomsLoaded", function(e, Rooms, Floor){
+
+				// Set Floor Name to our Containers
+				$('main.building .floor-name').html(Floor.name);
+
+				// Clear Menu Container
+				$('.room-list').empty();
+
+				$.each(Rooms, function(Index, Room){
+
+					var li = $("<li></li>").append($("<span></span>").html(Room.index));
+
+					$('.room-list').append(li);
+
+					li.hover(function(){
+						$(this).addClass('hover');
+
+						if(Room.object){
+							a.events().trigger("roomMouseEnter", [Room, Room.object]);
+						}
+					},function(){
+						$(this).removeClass('hover');
+
+						if(Room.object){
+							a.events().trigger("roomMouseLeave", [Room, Room.object]);
+						}
+					}).click(function(){
+						if(Room.object){
+							a.events().trigger("roomClicked", [Room, Room.object]);
+						}
+					});
+
+					Room.menuLink = li;
+
+				});
+
+			});
+
+			a.events().on("roomClicked", function(e, Room, SVGElement){
+				if(Room.checked){
+					SVGElement.attr({
+						fill:"#5bc0de"
+					});
+				}else{
+					SVGElement.attr({
+						fill:"#5cb85c"
+					});
+				}
+
+				if(Room.menuLink) Room.menuLink.toggleClass('checked');
+
+				Room.checked = !Room.checked;
+			});
+
+			a.events().on("roomMouseEnter", function(e, Room, SVGElement){
+				SVGElement.attr({
+					"fill-opacity": 0.5
+				});
+			});
+
+			a.events().on("roomMouseLeave", function(e, Room, SVGElement){
+				if(!Room.checked){
+					SVGElement.attr({
+						"fill-opacity": 0
+					});
+				}
+			});
+
+		});
+	</script>
 </body>
 </html>
